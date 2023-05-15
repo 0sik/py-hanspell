@@ -11,13 +11,38 @@ def hello():
     return "HelloWorld"
 
 
-@app.route("/model",methods=['POST'])
+@app.route("/api/grammers/check",methods=['POST'])
 def decision():
-    text = request.get_json()['tags']
-    spelled = spell_checker.check(text)
-    spelled_text = spelled.checked
-    json_data = {"message": spelled_text}
+    text = request.get_json()['content']
+    content_chunks = [text[i:i+500] for i in range(0, len(text), 500)]
+
+    spelled_text_chunks = []
+    for chunk in content_chunks:
+        spelled = spell_checker.check(chunk)
+        spelled_text_chunks.append(spelled.checked)
+
+    spelled_text = ''.join(spelled_text_chunks)
+    json_data = {"content": spelled_text}
     return jsonify(json_data)
+# 람다형식
+# import json
+# from hanspell import spell_checker
+
+# def lambda_handler(event, context):
+#     text = event['content']
+#     content_chunks = [text[i:i+500] for i in range(0, len(text), 500)]
+
+#     spelled_text_chunks = []
+#     for chunk in content_chunks:
+#         spelled = spell_checker.check(chunk)
+#         spelled_text_chunks.append(spelled.checked)
+
+#     spelled_text = ''.join(spelled_text_chunks)
+
+#     return {
+#         "content": spelled_text
+#     }
+
 
 
 @app.route('/model', methods=['GET'])
