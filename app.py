@@ -24,8 +24,7 @@ def decision():
     spelled_text = ''.join(spelled_text_chunks)
     json_data = {"content": spelled_text}
     return jsonify(json_data)
-# 람다형식
-# import json
+
 # from hanspell import spell_checker
 
 # def lambda_handler(event, context):
